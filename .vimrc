@@ -34,7 +34,10 @@ Plugin 'bling/vim-bufferline'  " Muestra los buffers abiertos en la barra de est
 Plugin 'bling/vim-airline'  " Una barra de status mejor
 Plugin 'Valloric/YouCompleteMe'  " Auto code complete
 Plugin 'sheerun/vim-polyglot'  " Soporte para mejorar la syntaxis de varios lenguajes incluye blade
-Plugin 'wikitopian/hardmode'  " Deshabilita el homerow
+Plugin 'takac/vim-hardtime'  " Enables practice mode
+Plugin 'vim-scripts/BufOnly.vim'  " Allow to close all buffers but current
+Plugin 'tkztmk/vim-vala'  " vala vim support
+Plugin 'szw/vim-tags'  " exhuberant ctags mannager
 " Plugin 'xsbeats/vim-blade'  " Soporte para blade php
 " Plugin 'jistr/vim-nerdtree-tabs'
 
@@ -67,7 +70,7 @@ if exists('+colorcolumn')
   set colorcolumn=81  " Agrega un ruler para 80 chars
 
   " El ruler en java debe ser mas permisivo
-  autocmd FileType java setlocal colorcolumn=100
+  autocmd FileType java setlocal colorcolumn=101
 
   highlight link OverLength ColorColumn
   highlight ColorColumn ctermbg=233
@@ -104,9 +107,6 @@ noremap <leader>l :set list!<CR>
 autocmd Filetype gitcommit setlocal spell textwidth=72 formatoptions+=t colorcolumn=73
 autocmd Filetype markdown setlocal spell textwidth=80 formatoptions+=t colorcolumn=81
 
-" Enable HardMode for practicing
-autocmd VimEnter,BufNewFile,BufReadPost * silent! call HardMode()
-
 " Cambia los caracteres por default para los tabs y fin de lineas
 set listchars=tab:▸\ ,eol:¬
 
@@ -121,9 +121,19 @@ let g:NERDTreeChDirMode=2
 
 " El primero es visible en todas las tabs, el segundo solo en la que se usa
 " map <F2> :NERDTreeTabsToggle<CR>
-map <F2> :NERDTreeToggle<CR>
-map <C-h> :tabp<CR>
-map <C-l> :tabn<CR>
+map <leader>t :NERDTreeToggle<CR>
+
+" Buffer control
+map <C-h> :bprevious<CR>
+map <C-l> :bnext<CR>
+map <C-a>a <C-^>
+map <C-a>d :q<CR>
+map <C-a>k :BD<CR>
+map <C-a>c :BufOnly<CR>
+
+" Tab control screen-mode
+map <C-a>n :tabn<CR>
+map <C-a>p :tabp<CR>
 
 " Agrega salto de linea en donde esta el cursor, a veces no es posible r<CR>
 nmap <CR> i<CR><Esc>k
@@ -132,7 +142,8 @@ nmap <CR> i<CR><Esc>k
 nnoremap <expr> gV "`[".getregtype(v:register)[0]."`]"
 
 " Busqueda Ctrl + p
-nmap <Space> <C-p>
+let g:ctrlp_map = '<C-Space>'
+nmap <C-p> :CtrlPTag<CR>
 
 " Disables arrow keys
 " inoremap <Up> <NOP>
@@ -143,28 +154,18 @@ nmap <Space> <C-p>
 " noremap <Down> <NOP>
 " noremap <Left> <NOP>
 " noremap <Right> <NOP>
-" 
+
 " " Disables l and h for training mode
 " noremap l <NOP>
 " noremap h <NOP>
 
 " Cambia entre numero de linas realtivas o absolutas
-nnoremap <silent><leader>ñ :set relativenumber!<cr>
-
-" Buffer control screen-mode
-map <C-a>n :bnext<CR>
-map <C-a>p :bprevious<CR>
-map <C-a>a <C-^>
-map <C-a>d :q<CR>
-map <C-a>k :BD<CR>
-
-" tell eclim to register its completion to vim's omni complete, YCM lo usa
-let g:EclimCompletionMethod = 'omnifunc'
+nnoremap <silent><leader>r :set relativenumber!<cr>
 
 " Cierra la ventana de preview cuando se completa una palabra o cuando se deja
 " el modo de inserccion
 let g:ycm_autoclose_preview_window_after_insertion = 1
-" let g:ycm_autoclose_preview_window_after_completion = 1
+let g:syntastic_vala_check_disabled = 1
 
 " No quiero ver la lista de buffers en la linea de comandos
 let g:bufferline_echo = 0
