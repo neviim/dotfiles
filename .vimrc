@@ -14,7 +14,6 @@ Plugin 'gmarik/Vundle.vim'
 " use :PluginInstall in vim for installing
 " original repos on github
 Plugin 'docunext/closetag.vim'
-Plugin 'StanAngeloff/php.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'kien/ctrlp.vim'
 Plugin 'scrooloose/syntastic'
@@ -32,14 +31,20 @@ Plugin 'powerman/vim-plugin-viewdoc'  " Documentacion para varios lenguajes
 Plugin 'tpope/vim-fugitive'  " Git para vim
 Plugin 'bling/vim-bufferline'  " Muestra los buffers abiertos en la barra de estado
 Plugin 'bling/vim-airline'  " Una barra de status mejor
-Plugin 'Valloric/YouCompleteMe'  " Auto code complete
 Plugin 'sheerun/vim-polyglot'  " Soporte para mejorar la syntaxis de varios lenguajes incluye blade
 Plugin 'takac/vim-hardtime'  " Enables practice mode
 Plugin 'vim-scripts/BufOnly.vim'  " Allow to close all buffers but current
 Plugin 'tkztmk/vim-vala'  " vala vim support
 Plugin 'szw/vim-tags'  " exhuberant ctags mannager
-" Plugin 'xsbeats/vim-blade'  " Soporte para blade php
-" Plugin 'jistr/vim-nerdtree-tabs'
+" Plugin 'Shougo/neocomplete.vim'  " Completion engine to replace ycm
+" Plugin 'jordwalke/AutoComplPop'  " autocompletado compatible con ultisnips
+" Plugin 'jordwalke/VimCompleteLikeAModernEditor' " Integra autocomplpop y ultisnips
+Plugin 'Valloric/YouCompleteMe'  " A well know completion engine
+Plugin 'Shougo/vimproc.vim' " dependency for vimshell
+Plugin 'Shougo/vimshell.vim' " shell inside vim
+Plugin 'ryanoasis/vim-webdevicons' " Pretty icons for nerdtree
+Plugin 'ZzAntares/vim-laravel'
+Plugin 'jdkanani/vim-material-theme'  " Material design theme
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -58,7 +63,6 @@ filetype plugin indent on    " required
 
 " permite que % tambien salte entre etiqutas en html
 runtime macros/matchit.vim
-
 
 set number
 syntax on
@@ -82,15 +86,17 @@ set encoding=utf8
 set nobackup    " No backup files
 set noswapfile  " No swap file
 
-" El plugin tpope/vim-sleuth soluciona el tema de la identacion.
-" set smartindent
-" set tabstop=4  " El TAB mide 4 espacios
-" set softtabstop=4
-" set shiftwidth=4 " Cuando borres identacion o insertes seran 4 espacios
-" set expandtab " El TAB son espacios en realidad
+" Natural splitting
+set splitbelow
+" set splitright
 
 set hidden  " Cambia de buffer sin haber guardado los otros
-set hlsearch  "Highlight searching
+set hlsearch  " Highlight searching
+set incsearch  " Jump to match while typing
+set ignorecase  " search case insensitive
+set smartcase  " case sensitive when using caps
+set visualbell  " don't beep
+set noerrorbells  " don't beep
 
 " set t_Co=256  " Habilitarlo cuando se quieran otros colorschemes
 colorscheme Tomorrow-Night
@@ -106,6 +112,30 @@ noremap <leader>l :set list!<CR>
 " Auto formaters
 autocmd Filetype gitcommit setlocal spell textwidth=72 formatoptions+=t colorcolumn=73
 autocmd Filetype markdown setlocal spell textwidth=80 formatoptions+=t colorcolumn=81
+autocmd Filetype html setlocal ts=2 sts=2 sw=2 expandtab
+autocmd Filetype js setlocal ts=2 sts=2 sw=2 expandtab
+autocmd Filetype css setlocal ts=2 sts=2 sw=2 expandtab
+autocmd Filetype eruby setlocal ts=2 sts=2 sw=2 expandtab
+autocmd Filetype blade setlocal ts=2 sts=2 sw=2 expandtab
+autocmd Filetype php setlocal textwidth=80 formatoptions+=t colorcolumn=81
+autocmd Filetype python setlocal textwidth=79 formatoptions+=t colorcolumn=80
+
+" Spelling languages map
+nmap <silent> <leader>ss :set spelllang=es<CR>
+nmap <silent> <leader>se :set spelllang=en<CR>
+
+" Move cursor naturally
+nmap j gj
+nmap k gk
+
+" Attemp to fix misspelling
+nmap <silent> <leader>fs 1z=
+
+" Fugitive maps
+nmap <leader>gs :Gstatus<CR>
+
+" Gdiff defaults to vertical split
+set diffopt+=vertical
 
 " Cambia los caracteres por default para los tabs y fin de lineas
 set listchars=tab:▸\ ,eol:¬
@@ -120,8 +150,7 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 let g:NERDTreeChDirMode=2
 
 " El primero es visible en todas las tabs, el segundo solo en la que se usa
-" map <F2> :NERDTreeTabsToggle<CR>
-map <leader>t :NERDTreeToggle<CR>
+map <Tab><Tab> :NERDTreeToggle<CR>
 
 " Buffer control
 map <C-h> :bprevious<CR>
@@ -142,30 +171,35 @@ nmap <CR> i<CR><Esc>k
 nnoremap <expr> gV "`[".getregtype(v:register)[0]."`]"
 
 " Busqueda Ctrl + p
-let g:ctrlp_map = '<C-Space>'
-nmap <C-p> :CtrlPTag<CR>
-
-" Disables arrow keys
-" inoremap <Up> <NOP>
-" inoremap <Down> <NOP>
-" inoremap <Left> <NOP>
-" inoremap <Right> <NOP>
-" noremap <Up> <NOP>
-" noremap <Down> <NOP>
-" noremap <Left> <NOP>
-" noremap <Right> <NOP>
-
-" " Disables l and h for training mode
-" noremap l <NOP>
-" noremap h <NOP>
+" let g:ctrlp_map = '<C-Space>'
 
 " Cambia entre numero de linas realtivas o absolutas
 nnoremap <silent><leader>r :set relativenumber!<cr>
 
-" Cierra la ventana de preview cuando se completa una palabra o cuando se deja
-" el modo de inserccion
-let g:ycm_autoclose_preview_window_after_insertion = 1
-let g:syntastic_vala_check_disabled = 1
+let g:WebDevIconsUnicodeDecorateFolderNodes = 1
+let g:WebDevIconsUnicodeDecorateFolderNodeDefaultSymbol = ' '
+
+" 
+" " vim-webdevicons colors
+" NERDTress File highlighting
+function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
+exec 'autocmd FileType nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
+exec 'autocmd FileType nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
+endfunction
+
+call NERDTreeHighlightFile('jade', 'green', 'none', 'green', '#151515')
+call NERDTreeHighlightFile('ini', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('md', 'blue', 'none', '#9bddff', '#151515')
+call NERDTreeHighlightFile('yml', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('config', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('conf', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('json', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('html', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('styl', 'cyan', 'none', 'cyan', '#151515')
+call NERDTreeHighlightFile('css', 'cyan', 'none', 'cyan', '#151515')
+call NERDTreeHighlightFile('coffee', 'Red', 'none', 'red', '#151515')
+call NERDTreeHighlightFile('js', 'Red', 'none', '#ffa500', '#151515')
+call NERDTreeHighlightFile('php', 'blue', 'none', '#8ecded', '#151515')
 
 " No quiero ver la lista de buffers en la linea de comandos
 let g:bufferline_echo = 0
@@ -182,9 +216,6 @@ let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline_inactive_collapse = 1
 let g:airline_exclude_filetypes = ['nerdtree']
 let g:airline_exclude_preview = 0
-
-" Recarga el .vimrc cuando se edita
-" autocmd bufwritepost .vimrc source $MYVIMRC
 
 " Set tabstop, softtabstop and shiftwidth to the same value con :Stab
 command! -nargs=* Stab call Stab(<f-args>)
@@ -218,9 +249,10 @@ function! SummarizeTabs()
   endtry
 endfunction
 
-" =================================== Handle conflicts between YCM and UltiSnips
-let g:UltiSnipsExpandTrigger="<Tab>"
-
+" UltiSnips completion function that tries to expand a snippet. If there's no
+" snippet for expanding, it checks for completion window and if it's
+" shown, selects first element. If there's no completion window it tries to
+" jump to next placeholder. If there's no placeholder it just returns TAB key 
 function! g:UltiSnips_Complete()
     call UltiSnips#ExpandSnippet()
     if g:ulti_expand_res == 0
@@ -229,23 +261,33 @@ function! g:UltiSnips_Complete()
         else
             call UltiSnips#JumpForwards()
             if g:ulti_jump_forwards_res == 0
-               return "\<TAB>"
+               return "\<Tab>"
             endif
         endif
     endif
     return ""
 endfunction
 
+" Intercepts YMC mappings so Ultisnips and YMC can work with the above function.
 au BufEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:UltiSnips_Complete()<cr>"
 
+" UltiSnips
+let g:UltiSnipsExpandTrigger="<Tab>"
 let g:UltiSnipsJumpForwardTrigger="<Tab>"
 let g:UltiSnipsJumpBackwardTrigger="<S-Tab>"
-let g:UltiSnipsListSnippets="<C-e>"
 let g:UltiSnipsEditSplit="horizontal"
 
-" this mapping Enter key to <C-y> to chose the current highlight item 
-" and close the selection list, same as other IDEs.
-" CONFLICT with some plugins like tpope/Endwise
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-" ==============================================================================
+" VimShell mappings
+nmap <Space>s <Plug>(vimshell_split_switch)
 
+" ConqueTerm
+let g:ConqueTerm_InsertOnEnter = 1
+let g:ConqueTerm_CloseOnEnd = 1
+let g:ConqueTerm_TERM = 'xterm'
+let g:ConqueTerm_Color = 0
+
+" YCM
+let g:ycm_autoclose_preview_window_after_insertion = 1
+
+" Syntastyc
+let g:syntastic_python_checkers = ['flake8']
