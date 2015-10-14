@@ -36,15 +36,17 @@ Plugin 'takac/vim-hardtime'  " Enables practice mode
 Plugin 'vim-scripts/BufOnly.vim'  " Allow to close all buffers but current
 Plugin 'tkztmk/vim-vala'  " vala vim support
 Plugin 'szw/vim-tags'  " exhuberant ctags mannager
-" Plugin 'Shougo/neocomplete.vim'  " Completion engine to replace ycm
-" Plugin 'jordwalke/AutoComplPop'  " autocompletado compatible con ultisnips
-" Plugin 'jordwalke/VimCompleteLikeAModernEditor' " Integra autocomplpop y ultisnips
 Plugin 'Valloric/YouCompleteMe'  " A well know completion engine
 Plugin 'Shougo/vimproc.vim' " dependency for vimshell
 Plugin 'Shougo/vimshell.vim' " shell inside vim
 Plugin 'ryanoasis/vim-webdevicons' " Pretty icons for nerdtree
 Plugin 'ZzAntares/vim-laravel'
 Plugin 'jdkanani/vim-material-theme'  " Material design theme
+Plugin 'NLKNguyen/papercolor-theme'  " Paper color theme based on material
+Plugin 'reedes/vim-thematic'  " Theme management via presets
+Plugin 'tpope/vim-dispatch'  " run asynchronously
+Plugin 'mileszs/ack.vim'  " Wrapper para ack
+Plugin 'shawncplus/phpcomplete.vim'  " overloading happening even without this
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -99,15 +101,20 @@ set visualbell  " don't beep
 set noerrorbells  " don't beep
 
 " set t_Co=256  " Habilitarlo cuando se quieran otros colorschemes
-colorscheme Tomorrow-Night
+" colorscheme Tomorrow-Night
+
+set background=dark
+colorscheme PaperColor
 
 set list
 noremap <leader>l :set list!<CR> 
 
 " Permite ver los manpages en una nueva ventana
-" runtime ftplugin/man.vim
+" source $VIMRUNTIME/ftplugin/man.vim
+runtime ftplugin/man.vim
 " autocmd Filetype sh nnoremap K :Man <cword><CR>
-" autocmd Filetype php nnoremap <buffer> K :Man --manpath=/usr/share/php/docs/pman/ <cword><CR>
+autocmd Filetype php setlocal keywordprg=pman
+" autocmd Filetype php nnoremap <buffer> K :Man --manpath=/usr/local/pear/docs/pman/man3 <cword><CR>
 
 " Auto formaters
 autocmd Filetype gitcommit setlocal spell textwidth=72 formatoptions+=t colorcolumn=73
@@ -140,6 +147,9 @@ set diffopt+=vertical
 " Cambia los caracteres por default para los tabs y fin de lineas
 set listchars=tab:▸\ ,eol:¬
 
+" Habilita el statusline haciendo posible ver vim-airline
+set laststatus=2
+
 " Cambia el escape a jk para más rapidez
 imap kj <Esc>
 
@@ -149,7 +159,7 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 " Cambia el CWD a donde este el root de NERDTree
 let g:NERDTreeChDirMode=2
 
-" El primero es visible en todas las tabs, el segundo solo en la que se usa
+" Abrir NERDTree con doble <Tab>
 map <Tab><Tab> :NERDTreeToggle<CR>
 
 " Buffer control
@@ -159,6 +169,9 @@ map <C-a>a <C-^>
 map <C-a>d :q<CR>
 map <C-a>k :BD<CR>
 map <C-a>c :BufOnly<CR>
+
+" Close man pages with Ctrl+d q
+autocmd Filetype help,man,pman map <buffer> <C-a>d q
 
 " Tab control screen-mode
 map <C-a>n :tabn<CR>
@@ -204,11 +217,14 @@ call NERDTreeHighlightFile('php', 'blue', 'none', '#8ecded', '#151515')
 " No quiero ver la lista de buffers en la linea de comandos
 let g:bufferline_echo = 0
 
+" Airline
 " Muestra simbolos bonitos en la barra de estado vim-airline
 let g:airline_powerline_fonts = 1
+
 if !exists('g:airline_symbols')
   let g:airline_symbols = {}
 endif
+
 let g:airline_symbols.space = "\ua0"
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ''
@@ -216,6 +232,7 @@ let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline_inactive_collapse = 1
 let g:airline_exclude_filetypes = ['nerdtree']
 let g:airline_exclude_preview = 0
+let g:airline_theme='molokai'
 
 " Set tabstop, softtabstop and shiftwidth to the same value con :Stab
 command! -nargs=* Stab call Stab(<f-args>)
@@ -278,16 +295,56 @@ let g:UltiSnipsJumpBackwardTrigger="<S-Tab>"
 let g:UltiSnipsEditSplit="horizontal"
 
 " VimShell mappings
-nmap <Space>s <Plug>(vimshell_split_switch)
+nmap <leader>sh <Plug>(vimshell_split_switch)
+autocmd Filetype vimshell nnoremap <buffer> <C-a>d :bdelete<Cr>
+autocmd Filetype vimshell inoremap <buffer> <C-a>d <Esc>:bdelete<Cr>
 
-" ConqueTerm
-let g:ConqueTerm_InsertOnEnter = 1
-let g:ConqueTerm_CloseOnEnd = 1
-let g:ConqueTerm_TERM = 'xterm'
-let g:ConqueTerm_Color = 0
+let g:vimshell_editor_command = 'gvim'
+let g:vimshell_prompt = '=> '
+let g:vimshell_environment_term = 'xterm-256color'
+let g:vimshell_split_command = 'split'
 
 " YCM
 let g:ycm_autoclose_preview_window_after_insertion = 1
 
+" Dispatch
+nnoremap <leader>ds :Dispatch 
+
+" Ack
+let g:ack_use_dispatch = 1
+
 " Syntastyc
 let g:syntastic_python_checkers = ['flake8']
+
+" Thematic
+nnoremap <Leader>N :ThematicNext<CR>
+nnoremap <leader>P :ThematicPrevious<CR>
+
+" Menlo Regular for Powerline Plus Nerd File Types
+let g:thematic#themes = {
+\ 'demoda': { 'colorscheme': 'PaperColor',
+\             'background': 'dark',
+\             'airline-theme': 'molokai',
+\             'typeface': 'Monaco for Powerline Plus Nerd File Types',
+\             'font-size': '15',
+\             'linespace': '3',
+\             'transparency': '10',
+\           },
+\ 'scode': { 'colorscheme': 'PaperColor',
+\            'background': 'dark',
+\            'airline-theme': 'bubblegum',
+\            'typeface': 'Menlo Regular for Powerline Plus Nerd File Types',
+\            'font-size': '15',
+\            'linespace': '5',
+\            'transparency': '10',
+\          },
+\ 'matrix': { 'colorscheme': 'base16-greenscreen',
+\             'background': 'dark',
+\             'airline-theme': 'wombat',
+\             'typeface': 'Ubuntu Mono derivative Powerline Plus Nerd File Types Mono',
+\             'font-size': '18',
+\             'linespace': '5',
+\           },
+\ }
+
+let g:thematic#theme_name = 'demoda'
