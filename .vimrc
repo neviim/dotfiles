@@ -1,66 +1,70 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
-" set the runtime path to include Vundle and initialize
+" Load vundle
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
-
-" let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
-
-" My Plugins here:
-" use :PluginInstall in vim for installing
-" original repos on github
-Plugin 'docunext/closetag.vim'
 Plugin 'scrooloose/nerdtree'
-Plugin 'kien/ctrlp.vim'
+Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'scrooloose/syntastic'
-Plugin 'vim-scripts/ScrollColors'
+" Plugin 'vim-scripts/ScrollColors'
 Plugin 'SirVer/ultisnips'
-Plugin 'ZzAntares/vim-snippets'  " Mis snippets fork de honza/vim-snippets
-Plugin 'jiangmiao/auto-pairs'  " Auto cierra parentesis y otros symbolos en pares
 Plugin 'tpope/vim-sleuth'  " Detecta la identación automaticamente
 Plugin 'airblade/vim-gitgutter'  " git diff en el buffer
 Plugin 'tpope/vim-surround'  " Cambia, agrega o elimina lo que encierra una palabra.
 Plugin 'vim-scripts/CSApprox'  " Adapta los colorschemes de gvim a vim terminal
 Plugin 'vim-scripts/bufkill.vim'  " Permite cerrar buffers sin que vim salga
-Plugin 'altercation/vim-colors-solarized'  " Instala solarized colorscheme
 Plugin 'powerman/vim-plugin-viewdoc'  " Documentacion para varios lenguajes
 Plugin 'tpope/vim-fugitive'  " Git para vim
+Plugin 'junegunn/gv.vim'  " Navegador de commits git
+Plugin 'shumphrey/fugitive-gitlab.vim'  " Makes :Gbrowse work on gitlab
 Plugin 'bling/vim-bufferline'  " Muestra los buffers abiertos en la barra de estado
 Plugin 'bling/vim-airline'  " Una barra de status mejor
+Plugin 'vim-airline/vim-airline-themes'  " Temas para airline
 Plugin 'sheerun/vim-polyglot'  " Soporte para mejorar la syntaxis de varios lenguajes incluye blade
-Plugin 'takac/vim-hardtime'  " Enables practice mode
 Plugin 'vim-scripts/BufOnly.vim'  " Allow to close all buffers but current
-Plugin 'tkztmk/vim-vala'  " vala vim support
-Plugin 'szw/vim-tags'  " exhuberant ctags mannager
+" Plugin 'tkztmk/vim-vala'  " vala vim support
 Plugin 'Valloric/YouCompleteMe'  " A well know completion engine
 Plugin 'Shougo/vimproc.vim' " dependency for vimshell
 Plugin 'Shougo/vimshell.vim' " shell inside vim
 Plugin 'ryanoasis/vim-webdevicons' " Pretty icons for nerdtree
-Plugin 'ZzAntares/vim-laravel'
-Plugin 'jdkanani/vim-material-theme'  " Material design theme
-Plugin 'NLKNguyen/papercolor-theme'  " Paper color theme based on material
+" Plugin 'ZzAntares/vim-laravel'
 Plugin 'reedes/vim-thematic'  " Theme management via presets
 Plugin 'tpope/vim-dispatch'  " run asynchronously
-Plugin 'mileszs/ack.vim'  " Wrapper para ack
-Plugin 'shawncplus/phpcomplete.vim'  " overloading happening even without this
+" Plugin 'mileszs/ack.vim'  " Wrapper para ack
+Plugin 'shawncplus/phpcomplete.vim'  " Better php completion
+Plugin 'tpope/vim-repeat'  " Support of repeat commands
+Plugin 'mattn/emmet-vim'  " Easy HTML writing
+Plugin 'godlygeek/tabular'  " Alignment plugin
+Plugin 'Raimondi/delimitMate'  " Auto close parentesis
+Plugin 'takac/vim-hardtime'  " Excercise vim navigation commands
+Plugin 'tpope/vim-endwise'  " Append end to the end
+Plugin 'haya14busa/incsearch.vim'  " Search enhanced
+Plugin 'justinmk/vim-sneak'  " oh my motion command
+" Plugin 'trusktr/seti.vim'  " Colorscheme
+Plugin 'ajh17/Spacegray.vim'  " Colorscheme
+" Plugin 'jdkanani/vim-material-theme'  " Material design theme
+" Plugin 'NLKNguyen/papercolor-theme'  " Paper color theme based on material
+" Plugin 'tomasr/molokai'
+Plugin 'cseelus/vim-colors-clearance'  "Colorscheme
+Plugin 'whatyouhide/vim-gotham'  " Colorscheme
+Plugin 'chriskempson/base16-vim'  " base16 themes
+Plugin 'janko-m/vim-test'  " Test runner
+Plugin 'vobornik/vim-mql4'  " Syntax for MQL4
+Plugin 'altercation/vim-colors-solarized'  " Solarized colorscheme
+Plugin 'nanotech/jellybeans.vim'
+Plugin 'kristijanhusak/vim-hybrid-material'
+Plugin 'vim-scripts/gitignore'  " Ignore contents on gitignore files on tab completion
+Plugin 'jalvesaq/Nvim-R'  " Support for R language
 
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
-"
+call vundle#end()
+filetype plugin indent on
 " Brief help
 " :PluginList          - list configured plugins
 " :PluginInstall(!)    - install (update) plugins
 " :PluginSearch(!) foo - search (or refresh cache first) for foo
 " :PluginClean(!)      - confirm (or auto-approve) removal of unused plugins
-"
-" see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 
 " permite que % tambien salte entre etiqutas en html
@@ -84,12 +88,16 @@ if exists('+colorcolumn')
 endif
 
 set encoding=utf8
+set previewheight=15
+set clipboard=unnamed
 
 set nobackup    " No backup files
 set noswapfile  " No swap file
 
 " Natural splitting
 set splitbelow
+set relativenumber
+
 " set splitright
 
 set hidden  " Cambia de buffer sin haber guardado los otros
@@ -100,32 +108,36 @@ set smartcase  " case sensitive when using caps
 set visualbell  " don't beep
 set noerrorbells  " don't beep
 
-" set t_Co=256  " Habilitarlo cuando se quieran otros colorschemes
-" colorscheme Tomorrow-Night
-
-set background=dark
-colorscheme PaperColor
-
 set list
-noremap <leader>l :set list!<CR> 
+let mapleader = "\<Space>"
+nnoremap <leader>l :set list!<CR> 
+nnoremap <leader>o :noh<CR>
 
 " Permite ver los manpages en una nueva ventana
 " source $VIMRUNTIME/ftplugin/man.vim
-runtime ftplugin/man.vim
+" runtime ftplugin/man.vim
 " autocmd Filetype sh nnoremap K :Man <cword><CR>
 autocmd Filetype php setlocal keywordprg=pman
+autocmd Filetype python setlocal keywordprg=pydoc
+autocmd Filetype ruby setlocal keywordprg=ri
 " autocmd Filetype php nnoremap <buffer> K :Man --manpath=/usr/local/pear/docs/pman/man3 <cword><CR>
 
 " Auto formaters
+autocmd Filetype html setlocal ts=2 sts=2 sw=2 expandtab
+autocmd Filetype javascript setlocal ts=2 sts=2 sw=2 expandtab
+autocmd Filetype css setlocal ts=2 sts=2 sw=2 expandtab
+autocmd Filetype eruby,ruby setlocal ts=2 sts=2 sw=2 expandtab
+autocmd Filetype blade setlocal ts=2 sts=2 sw=2 expandtab
+autocmd Filetype json setlocal ts=4 sts=4 sw=4 expandtab
+autocmd Filetype c setlocal ts=8 sts=8 sw=8 expandtab
+autocmd Filetype php,c setlocal textwidth=80 formatoptions+=t colorcolumn=81
+autocmd Filetype python setlocal textwidth=79 formatoptions+=t colorcolumn=80
+autocmd Filetype ruby setlocal textwidth=79 formatoptions+=t colorcolumn=80
 autocmd Filetype gitcommit setlocal spell textwidth=72 formatoptions+=t colorcolumn=73
 autocmd Filetype markdown setlocal spell textwidth=80 formatoptions+=t colorcolumn=81
-autocmd Filetype html setlocal ts=2 sts=2 sw=2 expandtab
-autocmd Filetype js setlocal ts=2 sts=2 sw=2 expandtab
-autocmd Filetype css setlocal ts=2 sts=2 sw=2 expandtab
-autocmd Filetype eruby setlocal ts=2 sts=2 sw=2 expandtab
-autocmd Filetype blade setlocal ts=2 sts=2 sw=2 expandtab
-autocmd Filetype php setlocal textwidth=80 formatoptions+=t colorcolumn=81
-autocmd Filetype python setlocal textwidth=79 formatoptions+=t colorcolumn=80
+
+" Shurtcut for enabling djangohtml
+nmap <leader>dft :set filetype=htmldjango<CR>
 
 " Spelling languages map
 nmap <silent> <leader>ss :set spelllang=es<CR>
@@ -139,7 +151,18 @@ nmap k gk
 nmap <silent> <leader>fs 1z=
 
 " Fugitive maps
-nmap <leader>gs :Gstatus<CR>
+nnoremap <leader>gs :Gstatus<CR>
+nnoremap <leader>ga :Gwrite<CR>
+nnoremap <leader>gc :Gcommit<CR>
+nnoremap <leader>gl :GV<CR>
+nnoremap <leader>gv :GV!<CR>
+nnoremap <leader>go :Git checkout<Space>
+nnoremap <leader>gpl :Dispatch! git pull<Space>
+nnoremap <leader>gps :Dispatch! git push<Space>
+nnoremap <leader>gb :Gbrowse<CR>
+
+" Gbrowse on Gitlab
+let g:fugitive_gitlab_domains = ['http://git.microbit.com']
 
 " Gdiff defaults to vertical split
 set diffopt+=vertical
@@ -150,50 +173,62 @@ set listchars=tab:▸\ ,eol:¬
 " Habilita el statusline haciendo posible ver vim-airline
 set laststatus=2
 
-" Cambia el escape a jk para más rapidez
+" Cambia el escape a kj para más rapidez
 imap kj <Esc>
 
+" NERDTree
+let g:NERDTreeMapOpenSplit = "s"
+let g:NERDTreeMapOpenVSplit = "v"
+let g:NERDTreeMinimalUI = 1
+let g:NERDTreeAutoDeleteBuffer = 1
+let g:NERDTreeChDirMode = 2
+
 " Cierra VIM cuando NERDTree es la unica ventana activa
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
-" Cambia el CWD a donde este el root de NERDTree
-let g:NERDTreeChDirMode=2
-
-" Abrir NERDTree con doble <Tab>
+" Open NERDTree 2x<Tab>
 map <Tab><Tab> :NERDTreeToggle<CR>
 
 " Buffer control
-map <C-h> :bprevious<CR>
-map <C-l> :bnext<CR>
-map <C-a>a <C-^>
+nmap <C-h> :bprevious<CR>
+nmap <C-l> :bnext<CR>
+nmap <leader>ls :ls<CR>
+
+nmap gb <C-^>
 map <C-a>d :q<CR>
 map <C-a>k :BD<CR>
 map <C-a>c :BufOnly<CR>
 
-" Close man pages with Ctrl+d q
+" Close man pages with Ctrl+d q Only works when using ViewDocHelp
 autocmd Filetype help,man,pman map <buffer> <C-a>d q
 
-" Tab control screen-mode
-map <C-a>n :tabn<CR>
-map <C-a>p :tabp<CR>
+" Guardar con Ctrl+S
+nmap <C-s> :w<CR>
+imap <C-s> <Esc>:w<CR>
+
+" Move entire line up and down (Bubble effect)
+" Alt+j = ê   Alt+k = ë
+nnoremap <C-j> :m+<CR>==
+nnoremap <C-k> :m-2<CR>==
+inoremap <C-j> <Esc>:m+<CR>==gi
+inoremap <C-k> <Esc>:m-2<CR>==gi
+vnoremap <C-j> :m'>+<CR>gv=gv
+vnoremap <C-k> :m-2<CR>gv=gv
 
 " Agrega salto de linea en donde esta el cursor, a veces no es posible r<CR>
 nmap <CR> i<CR><Esc>k
 
-" Permite seleccionar texto despues de pegar
+" Allow to visual select pasted text
 nnoremap <expr> gV "`[".getregtype(v:register)[0]."`]"
-
-" Busqueda Ctrl + p
-" let g:ctrlp_map = '<C-Space>'
 
 " Cambia entre numero de linas realtivas o absolutas
 nnoremap <silent><leader>r :set relativenumber!<cr>
 
+" Vim WebDev Icons
 let g:WebDevIconsUnicodeDecorateFolderNodes = 1
 let g:WebDevIconsUnicodeDecorateFolderNodeDefaultSymbol = ' '
 
-" 
-" " vim-webdevicons colors
+" Vim WebDev Icons Colors
 " NERDTress File highlighting
 function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
 exec 'autocmd FileType nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
@@ -214,10 +249,10 @@ call NERDTreeHighlightFile('coffee', 'Red', 'none', 'red', '#151515')
 call NERDTreeHighlightFile('js', 'Red', 'none', '#ffa500', '#151515')
 call NERDTreeHighlightFile('php', 'blue', 'none', '#8ecded', '#151515')
 
-" No quiero ver la lista de buffers en la linea de comandos
+" Airline
+" No buffer list in comand line
 let g:bufferline_echo = 0
 
-" Airline
 " Muestra simbolos bonitos en la barra de estado vim-airline
 let g:airline_powerline_fonts = 1
 
@@ -232,9 +267,9 @@ let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline_inactive_collapse = 1
 let g:airline_exclude_filetypes = ['nerdtree']
 let g:airline_exclude_preview = 0
-let g:airline_theme='molokai'
+" let g:airline_theme='molokai'
 
-" Set tabstop, softtabstop and shiftwidth to the same value con :Stab
+" Set tabstop, softtabstop and shiftwidth to the same value with :Stab
 command! -nargs=* Stab call Stab(<f-args>)
 function! Stab(...)
   if a:0 > 0
@@ -269,7 +304,7 @@ endfunction
 " UltiSnips completion function that tries to expand a snippet. If there's no
 " snippet for expanding, it checks for completion window and if it's
 " shown, selects first element. If there's no completion window it tries to
-" jump to next placeholder. If there's no placeholder it just returns TAB key 
+" jump to next placeholder. If there's no placeholder it just returns TAB key
 function! g:UltiSnips_Complete()
     call UltiSnips#ExpandSnippet()
     if g:ulti_expand_res == 0
@@ -294,18 +329,72 @@ let g:UltiSnipsJumpForwardTrigger="<Tab>"
 let g:UltiSnipsJumpBackwardTrigger="<S-Tab>"
 let g:UltiSnipsEditSplit="horizontal"
 
-" VimShell mappings
-nmap <leader>sh <Plug>(vimshell_split_switch)
-autocmd Filetype vimshell nnoremap <buffer> <C-a>d :bdelete<Cr>
-autocmd Filetype vimshell inoremap <buffer> <C-a>d <Esc>:bdelete<Cr>
-
+" VimShell
 let g:vimshell_editor_command = 'gvim'
-let g:vimshell_prompt = '=> '
+let g:vimshell_prompt = '==> '
 let g:vimshell_environment_term = 'xterm-256color'
 let g:vimshell_split_command = 'split'
 
+" VimShell mappings
+
+nmap <leader>] :VimShellPop -toggle<CR>
+nmap <leader>sh :VimShell -toggle<CR>
+autocmd Filetype vimshell nmap <buffer> <C-a>d q
+autocmd Filetype vimshell imap <buffer> <C-a>d <Esc>q
+autocmd Filetype vimshell nmap <buffer> <C-a>k :bdelete<CR>
+autocmd Filetype vimshell imap <buffer> <C-a>k <Esc>:bdelete<CR>
+autocmd Filetype vimshell imap <buffer> <C-h> <Esc>:bprevious<CR>
+autocmd Filetype vimshell imap <buffer> <C-l> <Esc>:bnext<CR>
+autocmd Filetype vimshell imap <buffer> <leader>] <Esc>q
+autocmd Filetype vimshell nnoremap <buffer> i G:startinsert!<CR>
+
+" VimTest
+let test#strategy = "dispatch"
+
+" VimTest mappings
+nmap <silent> <leader>tt :TestNearest<CR>
+nmap <silent> <leader>tf :TestFile<CR>
+nmap <silent> <leader>ts :TestSuite<CR>
+nmap <silent> <leader>tl :TestLast<CR>
+nmap <silent> <leader>tg :TestVisit<CR>
+
+" Vim Sneak
+" Replace 'f' with 1-char Sneak
+nmap f <Plug>Sneak_f
+nmap F <Plug>Sneak_F
+xmap f <Plug>Sneak_f
+xmap F <Plug>Sneak_F
+omap f <Plug>Sneak_f
+omap F <Plug>Sneak_F
+" Replace 't' with 1-char Sneak
+nmap t <Plug>Sneak_t
+nmap T <Plug>Sneak_T
+xmap t <Plug>Sneak_t
+xmap T <Plug>Sneak_T
+omap t <Plug>Sneak_t
+omap T <Plug>Sneak_T
+
 " YCM
 let g:ycm_autoclose_preview_window_after_insertion = 1
+let g:ycm_python_binary_path = 'python3'
+
+" YCM mappings
+nnoremap <leader>gt :YcmCompleter GoTo<Cr>
+
+" CtrlP
+let g:ctrlp_open_new_file = 'h'
+" Faster CtrlP using ag
+let g:ctrlp_use_caching = 0
+if executable('ag')
+    set grepprg=ag\ --nogroup\ --nocolor
+
+    let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+else
+  let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files . -co --exclude-standard', 'find %s -type f']
+  let g:ctrlp_prompt_mappings = {
+    \ 'AcceptSelection("e")': ['<space>', '<cr>', '<2-LeftMouse>'],
+    \ }
+endif
 
 " Dispatch
 nnoremap <leader>ds :Dispatch 
@@ -313,8 +402,33 @@ nnoremap <leader>ds :Dispatch
 " Ack
 let g:ack_use_dispatch = 1
 
+" Tabular
+nnoremap <leader>ta :Tabular /
+vnoremap <leader>ta :Tabular /
+
+" Incsearch
+map /  <Plug>(incsearch-forward)
+map ?  <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
+
 " Syntastyc
 let g:syntastic_python_checkers = ['flake8']
+
+" DelimitMate
+let g:delimitMate_expand_cr = 1
+imap <C-g>g <Plug>delimitMateS-Tab
+imap <C-g>l <Plug>delimitMateJumpMany
+
+" Emmet
+let g:user_emmet_leader_key='<C-e>'
+
+" HardTime
+let g:hardtime_maxcount = 3
+let g:hardtime_default_on = 0
+let g:hardtime_ignore_buffer_patterns = ["NERD.*", "vundle", "vimshell"]
+let g:hardtime_ignore_quickfix = 1
+let g:hardtime_allow_different_key = 1
+nnoremap <leader>ht :HardTimeToggle<CR>
 
 " Thematic
 nnoremap <Leader>N :ThematicNext<CR>
@@ -322,29 +436,54 @@ nnoremap <leader>P :ThematicPrevious<CR>
 
 " Menlo Regular for Powerline Plus Nerd File Types
 let g:thematic#themes = {
-\ 'demoda': { 'colorscheme': 'PaperColor',
+\ 'demoda': { 'colorscheme': 'base16-ocean',
 \             'background': 'dark',
 \             'airline-theme': 'molokai',
 \             'typeface': 'Monaco for Powerline Plus Nerd File Types',
 \             'font-size': '15',
 \             'linespace': '3',
-\             'transparency': '10',
+\             'transparency': '0',
 \           },
-\ 'scode': { 'colorscheme': 'PaperColor',
+\ 'codify': { 'colorscheme': 'PaperColor',
 \            'background': 'dark',
-\            'airline-theme': 'bubblegum',
+\            'airline-theme': 'molokai',
 \            'typeface': 'Menlo Regular for Powerline Plus Nerd File Types',
-\            'font-size': '15',
-\            'linespace': '5',
-\            'transparency': '10',
+\            'font-size': '19',
+\            'linespace': '15',
+\            'transparency': '0',
 \          },
-\ 'matrix': { 'colorscheme': 'base16-greenscreen',
+\ 'molokai': { 'colorscheme': 'molokai',
+\             'background': 'dark',
+\             'airline-theme': 'molokai',
+\             'typeface': 'Inconsolata for Powerline Plus Nerd File Types',
+\             'font-size': '17',
+\             'linespace': '6',
+\           },
+\ 'codeschool': { 'colorscheme': 'codeschool',
 \             'background': 'dark',
 \             'airline-theme': 'wombat',
-\             'typeface': 'Ubuntu Mono derivative Powerline Plus Nerd File Types Mono',
+\             'typeface': 'Monaco for Powerline Plus Nerd File Types',
+\             'font-size': '15',
+\             'linespace': '6',
+\           },
+\ 'gotham': { 'colorscheme': 'gotham',
+\             'background': 'dark',
+\             'airline-theme': 'gotham',
+\             'typeface': 'Inconsolata for Powerline Plus Nerd File Types',
 \             'font-size': '18',
-\             'linespace': '5',
+\             'linespace': '6',
 \           },
 \ }
 
-let g:thematic#theme_name = 'demoda'
+" let g:thematic#theme_name = 'molokai'
+if $TERM == "xterm-256color"
+  set t_Co=256
+endif
+
+" colorscheme clearance
+" colorscheme spacegray
+" colorscheme jellybeans
+set background=dark
+colorscheme hybrid_material
+
+let g:airline_theme='powerlineish'
