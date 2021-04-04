@@ -12,10 +12,10 @@ endif
 
 call plug#begin(stdpath('data') . '/plugged')
   " Add or remove your plugins here:
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }   " Completion framework
-  Plug 'zchee/deoplete-go', {'do': 'make'}     " Go source completion for deoplete
-  Plug 'zchee/deoplete-jedi'                   " Python source completion for deoplete
-  Plug 'carlitux/deoplete-ternjs'              " Javascript source completion for deoplete
+  " Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }   " Completion framework
+  " Plug 'zchee/deoplete-go', {'do': 'make'}     " Go source completion for deoplete
+  " Plug 'zchee/deoplete-jedi'                   " Python source completion for deoplete
+  " Plug 'carlitux/deoplete-ternjs'              " Javascript source completion for deoplete
   Plug 'Shougo/echodoc.vim'                    " Display function signatures from completions the command line
   Plug 'w0rp/ale'                              " Asynchronous Linting Engine
   Plug 'vim-airline/vim-airline'               " Better looking status line and buffer line
@@ -41,6 +41,7 @@ call plug#begin(stdpath('data') . '/plugged')
   Plug 'neovimhaskell/haskell-vim'             " Haskell support
   Plug 'tomlion/vim-solidity'                  " Solidity support
   Plug 'elzr/vim-json'                         " Better JSON support
+  Plug 'LnL7/vim-nix'                          " Support for editting Nix files
   Plug 'mattn/emmet-vim'                       " Emmet for vim
 
   " Color Schemes Themes
@@ -264,8 +265,8 @@ noremap <C-p> :Denite file_rec<CR>
 let g:echodoc#enable_at_startup = 1
 
 " Deplete
-let g:deoplete#enable_at_startup = 1
-call deoplete#custom#option('max_list', 10)
+" let g:deoplete#enable_at_startup = 1
+" call deoplete#custom#option('max_list', 10)
 " https://github.com/Shougo/deoplete.nvim/wiki/Completion-Sources
 " https://github.com/padawan-php/deoplete-padawan
 " https://github.com/tpope/vim-eunuch
@@ -375,41 +376,41 @@ let g:UltiSnipsJumpBackwardTrigger = "<Nop>"
 let g:UltiSnipsEditSplit = "vertical"
 
 " Integration of Deoplete and UltiSnips both on <Tab> and <S-Tab>
-function! g:SmartTab()
-  if pumvisible()
-    call UltiSnips#ExpandSnippetOrJump()
-    if g:ulti_expand_or_jump_res == 0
-      return "\<C-n>"
-    else
-      return ''
-    endif
-  else
-    call UltiSnips#ExpandSnippetOrJump()
-    if g:ulti_expand_or_jump_res == 0
-      return "\<Tab>"
-    else
-      return ''
-    endif
-  endif
-endfunction
-
-function! g:SmartShiftTab()
-  if pumvisible()
-    call UltiSnips#JumpBackwards()
-    if g:ulti_jump_backwards_res == 0
-      return "\<C-p>"
-    else
-      return ''
-    endif
-  else
-    call UltiSnips#JumpBackwards()
-    if g:ulti_expand_or_jump_res == 0
-      return "\<S-Tab>"
-    else
-      return ''
-    endif
-  endif
-endfunction
+" function! g:SmartTab()
+"   if pumvisible()
+"     call UltiSnips#ExpandSnippetOrJump()
+"     if g:ulti_expand_or_jump_res == 0
+"       return "\<C-n>"
+"     else
+"       return ''
+"     endif
+"   else
+"     call UltiSnips#ExpandSnippetOrJump()
+"     if g:ulti_expand_or_jump_res == 0
+"       return "\<Tab>"
+"     else
+"       return ''
+"     endif
+"   endif
+" endfunction
+" 
+" function! g:SmartShiftTab()
+"   if pumvisible()
+"     call UltiSnips#JumpBackwards()
+"     if g:ulti_jump_backwards_res == 0
+"       return "\<C-p>"
+"     else
+"       return ''
+"     endif
+"   else
+"     call UltiSnips#JumpBackwards()
+"     if g:ulti_expand_or_jump_res == 0
+"       return "\<S-Tab>"
+"     else
+"       return ''
+"     endif
+"   endif
+" endfunction
 
 inoremap <silent> <Tab> <C-R>=g:SmartTab()<CR>
 snoremap <silent> <Tab> <Esc>:call g:SmartTab()<CR>

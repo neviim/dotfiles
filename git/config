@@ -1,0 +1,20 @@
+[user]
+  name = Julio César
+  email = zzantares@gmail.com
+  signingkey = A0E89FC2DF0EDDD3
+
+[fetch]
+  prune = true
+
+[color]
+  ui = true
+
+[alias]
+  logs = log --show-signature
+  graph = log --all --graph --decorate --oneline
+
+[commit]
+  gpgsign = true
+
+[pull]
+	rebase = true
