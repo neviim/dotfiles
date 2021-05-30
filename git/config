@@ -1,13 +1,17 @@
+[core]
+  pager = less -XFRS
+
 [user]
   name = Julio César
   email = zzantares@gmail.com
-  signingkey = A0E89FC2DF0EDDD3
+  signingkey = 67CAED28B2A90C16
 
 [fetch]
   prune = true
 
 [color]
   ui = true
+  pager = true
 
 [alias]
   logs = log --show-signature
@@ -17,4 +21,4 @@
   gpgsign = true
 
 [pull]
-	rebase = true
+  rebase = true

@@ -16,6 +16,7 @@ call plug#begin(stdpath('data') . '/plugged')
   " Plug 'zchee/deoplete-go', {'do': 'make'}     " Go source completion for deoplete
   " Plug 'zchee/deoplete-jedi'                   " Python source completion for deoplete
   " Plug 'carlitux/deoplete-ternjs'              " Javascript source completion for deoplete
+
   Plug 'Shougo/echodoc.vim'                    " Display function signatures from completions the command line
   Plug 'w0rp/ale'                              " Asynchronous Linting Engine
   Plug 'vim-airline/vim-airline'               " Better looking status line and buffer line
@@ -37,7 +38,6 @@ call plug#begin(stdpath('data') . '/plugged')
   Plug 'fatih/vim-go'                          " Go for Vim
   Plug 'motus/pig.vim'                         " Apache Pig Latin .pig
   Plug 'ElmCast/elm-vim'                       " Elm support
-  Plug 'alx741/vim-stylishask'                 " Haskell code style formatting
   Plug 'neovimhaskell/haskell-vim'             " Haskell support
   Plug 'tomlion/vim-solidity'                  " Solidity support
   Plug 'elzr/vim-json'                         " Better JSON support
@@ -359,10 +359,6 @@ endfunction
 " Elm support
 let g:elm_setup_keybindings = 0
 let g:elm_format_autosave = 1
-
-" Haskell support
-let g:stylishask_on_save = 1
-let g:haskell_indent_case_alternative = 1
 
 " PureScript support
 let purescript_indent_where = 2

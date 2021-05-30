@@ -128,7 +128,7 @@ font:
     #style: Italic
 
   # Point size
-  size: 18.0
+  size: 16.0
 
   # Offset is the extra space around each character. `offset.y` can be thought of
   # as modifying the line spacing, and `offset.x` as modifying the letter spacing.
@@ -432,6 +432,16 @@ debug:
   # Record all characters and escape sequences as test data.
   ref_test: false
 
+# Line indicator
+#
+# Color used for the indicator displaying the position in history during
+# search and vi mode.
+#
+# By default, these will use the opposing primary color.
+#line_indicator:
+#  foreground: None
+#  background: None
+
 # Key bindings
 #
 # Key bindings are specified as a list of objects. Each binding will specify a
@@ -526,16 +536,17 @@ debug:
 #   - AppKeypad
 key_bindings:
   # (Windows/Linux only)
-  - { key: V,        mods: Control|Shift, action: Paste            }
-  - { key: C,        mods: Control|Shift, action: Copy             }
-  - { key: Insert,   mods: Shift,         action: PasteSelection   }
-  - { key: Key0,     mods: Control,       action: ResetFontSize    }
-  - { key: Equals,   mods: Control,       action: IncreaseFontSize }
-  - { key: Add,      mods: Control,       action: IncreaseFontSize }
-  - { key: Subtract, mods: Control,       action: DecreaseFontSize }
-  - { key: Minus,    mods: Control,       action: DecreaseFontSize }
-  - { key: N,        mods: Super|Shift,   action: SpawnNewInstance }
-  - { key: F,        mods: Super|Shift,   action: ToggleFullscreen }
+  - { key: V,         mods: Control|Shift, action: Paste            }
+  - { key: C,         mods: Control|Shift, action: Copy             }
+  - { key: Insert,    mods: Shift,         action: PasteSelection   }
+  - { key: Key0,      mods: Control,       action: ResetFontSize    }
+  - { key: Equals,    mods: Control,       action: IncreaseFontSize }
+  - { key: Add,       mods: Control,       action: IncreaseFontSize }
+  - { key: Subtract,  mods: Control,       action: DecreaseFontSize }
+  - { key: Minus,     mods: Control,       action: DecreaseFontSize }
+  - { key: N,         mods: Super|Shift,   action: SpawnNewInstance }
+  - { key: F,         mods: Super|Shift,   action: ToggleFullscreen }
+  - { key: Space,     mods: Control,       action: ToggleViMode     }
 
   # (macOS only)
   #- { key: Key0,   mods: Command, action: ResetFontSize    }
@@ -549,6 +560,13 @@ key_bindings:
   #- { key: H,      mods: Command, action: Hide             }
   #- { key: Q,      mods: Command, action: Quit             }
   #- { key: W,      mods: Command, action: Quit             }
+  #
+
+  # Vi Mode
+  - { key: K,                       mode: Vi,            action: Down                   }
+  - { key: J,                       mode: Vi,            action: Left                   }
+  - { key: H,                       mode: Vi,            action: Up                     }
+  - { key: Q,                       mode: Vi,            action: ToggleViMode           }
 
   - { key: Paste,                   action: Paste                            }
   - { key: Copy,                    action: Copy                             }
