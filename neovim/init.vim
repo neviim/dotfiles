@@ -81,9 +81,6 @@ set ignorecase
 set smartcase
 let mapleader = "\<Space>"
 
-let g:python_host_prog = '/usr/local/bin/python'
-let g:python3_host_prog = '/usr/local/bin/python3'
-
 " =============================================================================
 " Base Mappings
 " =============================================================================
@@ -408,10 +405,10 @@ let g:UltiSnipsEditSplit = "vertical"
 "   endif
 " endfunction
 
-inoremap <silent> <Tab> <C-R>=g:SmartTab()<CR>
-snoremap <silent> <Tab> <Esc>:call g:SmartTab()<CR>
-inoremap <silent> <S-Tab> <C-R>=g:SmartShiftTab()<CR>
-snoremap <silent> <S-Tab> <Esc>:call g:SmartShiftTab()<CR>
+" inoremap <silent> <Tab> <C-R>=g:SmartTab()<CR>
+" snoremap <silent> <Tab> <Esc>:call g:SmartTab()<CR>
+" inoremap <silent> <S-Tab> <C-R>=g:SmartShiftTab()<CR>
+" snoremap <silent> <S-Tab> <Esc>:call g:SmartShiftTab()<CR>
 
 
 " =============================================================================
