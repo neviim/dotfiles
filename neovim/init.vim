@@ -16,12 +16,12 @@ call plug#begin(stdpath('data') . '/plugged')
   " Plug 'zchee/deoplete-go', {'do': 'make'}     " Go source completion for deoplete
   " Plug 'zchee/deoplete-jedi'                   " Python source completion for deoplete
   " Plug 'carlitux/deoplete-ternjs'              " Javascript source completion for deoplete
+  Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }  " Narrowing framework
 
   Plug 'Shougo/echodoc.vim'                    " Display function signatures from completions the command line
-  Plug 'w0rp/ale'                              " Asynchronous Linting Engine
+  Plug 'dense-analysis/ale'                    " Asynchronous Linting Engine
   Plug 'vim-airline/vim-airline'               " Better looking status line and buffer line
   Plug 'justinmk/vim-sneak'                    " Quick jump motion
-  Plug 'Shougo/denite.nvim'                    " Narrowing framework
   Plug 'SirVer/ultisnips'                      " Ultimate snippet solution for Vim
   Plug 'schickling/vim-bufonly'                " Kill all buffers but current
   Plug 'vim-scripts/gitignore'                 " Ignore .gitignore files on vim tab completion commands
@@ -34,7 +34,6 @@ call plug#begin(stdpath('data') . '/plugged')
 
   " File type & language support
   Plug 'sheerun/vim-polyglot'                  " Multilang support
-  Plug 'jalvesaq/Nvim-R'                       " R language support
   Plug 'fatih/vim-go'                          " Go for Vim
   Plug 'motus/pig.vim'                         " Apache Pig Latin .pig
   Plug 'ElmCast/elm-vim'                       " Elm support
@@ -119,7 +118,7 @@ function! LastFrame()
 endfunction
 
 tnoremap ;q <C-\><C-n>:call LastFrame()<CR>
-" 
+
 " Movement mappings (colemak)
 nmap h <Up>
 nmap k <Down>
@@ -221,13 +220,20 @@ autocmd FileType javascript setlocal et ts=2 sw=2 sts=2
 " Ale
 let g:ale_sign_error = '•'
 let g:ale_sign_warning = '●'
-let g:ale_lint_on_text_changed = 500
+let g:ale_lint_on_text_changed = 'always'
+let g:ale_lint_delay = 500
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 
+let g:ale_linters = {
+      \   'rust': ['analyzer'],
+      \   'python': ['flake8', 'mypy'],
+      \ }
 let g:ale_fixers = {
-      \   'python': ['yapf', 'black', 'isort'],
+      \   '*': ['remove_trailing_lines', 'trim_whitespace'],
+      \   'rust': ['rustfmt'],
+      \   'python': ['autopep8', 'yapf', 'black', 'isort'],
       \ }
 
 let g:ale_fix_on_save = 1
@@ -236,19 +242,10 @@ nmap <silent> ]e <Plug>(ale_next_wrap)
 nmap <silent> [e <Plug>(ale_previous_wrap)
 
 " Denite
-call denite#custom#var('file_rec', 'command',
-                       \ ['ag', '--follow', '--nocolor', '--nogroup', '--ignore', '*.pyc', '-g', ''])
+call denite#custom#var('file/rec', 'command',
+      \ ['rg', '--files', '--glob', '!.git', '--color', 'never'])
 
-call denite#custom#map('insert',
-                       \ '<C-k>',
-                       \ '<denite:move_to_next_line>',
-                       \ 'noremap')
-call denite#custom#map('insert',
-                       \ '<C-h>',
-                       \ '<denite:move_to_previous_line>',
-                       \ 'noremap')
-
-call denite#custom#option('default', {
+call denite#custom#option('_', {
               \ 'auto_resize': v:true,
               \ 'winheight': 10,
               \ 'highlight_matched_char' : 'Function',
@@ -256,7 +253,33 @@ call denite#custom#option('default', {
               \ })
 
 nnoremap <Leader>ls :Denite buffer<CR>
-noremap <C-p> :Denite file_rec<CR>
+noremap <C-p> :Denite -start-filter file/rec<CR>
+
+autocmd FileType denite call s:denite_my_settings()
+function! s:denite_my_settings() abort
+  nnoremap <silent><buffer><expr> <CR>
+  \ denite#do_map('do_action')
+  nnoremap <silent><buffer><expr> d
+  \ denite#do_map('do_action', 'delete')
+  nnoremap <silent><buffer><expr> p
+  \ denite#do_map('do_action', 'preview')
+  nnoremap <silent><buffer><expr> q
+  \ denite#do_map('quit')
+  nnoremap <silent><buffer><expr> i
+  \ denite#do_map('open_filter_buffer')
+  nnoremap <silent><buffer><expr> <Space>
+  \ denite#do_map('toggle_select').'j'
+endfunction
+
+autocmd FileType denite-filter call s:denite_filter_my_settings()
+function! s:denite_filter_my_settings() abort
+  inoremap <silent><buffer><expr> <C-k> denite#increment_parent_cursor(1)
+  inoremap <silent><buffer><expr> <C-h> denite#increment_parent_cursor(-1)
+  nnoremap <silent><buffer><expr> <C-k> denite#increment_parent_cursor(1)
+  nnoremap <silent><buffer><expr> <C-h> denite#increment_parent_cursor(-1)
+  inoremap <silent><buffer><expr> <CR> denite#do_map('do_action')
+  imap <silent><buffer> <Esc> <Plug>(denite_filter_quit)
+endfunction
 
 " Echodoc
 let g:echodoc#enable_at_startup = 1
@@ -386,7 +409,7 @@ let g:UltiSnipsEditSplit = "vertical"
 "     endif
 "   endif
 " endfunction
-" 
+"
 " function! g:SmartShiftTab()
 "   if pumvisible()
 "     call UltiSnips#JumpBackwards()
