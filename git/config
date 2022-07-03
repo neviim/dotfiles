@@ -1,27 +1,29 @@
-[core]
-  pager = less -XFRS
-
-[user]
-  name = Julio César
-  email = zzantares@gmail.com
-  signingkey = 67CAED28B2A90C16
-
-[fetch]
-  prune = true
+[alias]
+	graphs = "log --all --graph --decorate --oneline"
+	logs = "log --show-signature"
 
 [color]
-  ui = true
-  pager = true
-
-[alias]
-  logs = log --show-signature
-  graph = log --all --graph --decorate --oneline
+	pager = true
+	ui = true
 
 [commit]
-  gpgsign = true
+	gpgSign = true
 
-[pull]
-  rebase = true
+[core]
+	editor = "nvim"
+	pager = "less -XFRS"
+
+[fetch]
+	prune = true
 
 [init]
-  defaultBranch = master
+	defaultBranch = "master"
+
+[pull]
+	ff = "only"
+	rebase = true
+
+[user]
+	email = "zzantares@gmail.com"
+	name = "Julio César"
+	signingKey = "67CAED28B2A90C16"

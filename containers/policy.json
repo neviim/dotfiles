@@ -1,0 +1,20 @@
+{
+  "default": [{
+    "type": "reject"
+  }],
+  "transports": {
+    "docker": {
+      "docker.io/nixos": [{
+        "type": "insecureAcceptAnything"
+      }],
+      "docker.io/library/busybox": [{
+        "type": "insecureAcceptAnything"
+      }]
+    },
+    "dir": {
+      "": [{
+        "type": "insecureAcceptAnything"
+      }]
+    }
+  }
+}
