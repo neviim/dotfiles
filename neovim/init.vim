@@ -195,6 +195,9 @@ autocmd FileType html setlocal et ts=2 sw=2 sts=2
 " JSON settings
 autocmd FileType json setlocal et ts=2 sw=2 sts=2
 
+" Ba[Sh]ell settings
+autocmd FileType sh setlocal et ts=4 sw=4 sts=4
+
 " Vimscript settings
 autocmd FileType vim setlocal et ts=2 sw=2 sts=2
 
