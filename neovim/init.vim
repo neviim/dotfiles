@@ -237,6 +237,7 @@ let g:ale_fixers = {
       \   '*': ['remove_trailing_lines', 'trim_whitespace'],
       \   'rust': ['rustfmt'],
       \   'python': ['autopep8', 'yapf', 'black', 'isort'],
+      \   'nix': ['nixfmt'],
       \ }
 
 let g:ale_fix_on_save = 1
